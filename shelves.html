@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html>
+    
+<head>
+  <title>Map BAAA library</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style-shelves.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    
+    
+</head>
+    
+    
+<body>
+    
+    <div id="center-search">
+<!--Make sure the form has the autocomplete function switched off:-->
+<!-- form autocomplete="off" -->
+  <div class="autocomplete" style="width:300px;">
+    <input id="myInput" type="text" name="myCountry" placeholder="Book Title" value="">
+  </div>
+
+    <button onclick="myFunction()">Search</button>
+
+<script>
+function autocomplete(inp, arr) {
+  /*the autocomplete function takes two arguments,
+  the text field element and an array of possible autocompleted values:*/
+  var currentFocus;
+  /*execute a function when someone writes in the text field:*/
+  inp.addEventListener("input", function(e) {
+      var a, b, i, val = this.value;
+      /*close any already open lists of autocompleted values*/
+      closeAllLists();
+      if (!val) { return false;}
+      currentFocus = -1;
+      /*create a DIV element that will contain the items (values):*/
+      a = document.createElement("DIV");
+      a.setAttribute("id", this.id + "autocomplete-list");
+      a.setAttribute("class", "autocomplete-items");
+      /*append the DIV element as a child of the autocomplete container:*/
+      this.parentNode.appendChild(a);
+      /*for each item in the array...*/
+      for (i = 0; i < arr.length; i++) {
+        /*check if the item starts with the same letters as the text field value:*/
+        if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+          /*create a DIV element for each matching element:*/
+          b = document.createElement("DIV");
+          /*make the matching letters bold:*/
+          b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+          b.innerHTML += arr[i].substr(val.length);
+          /*insert a input field that will hold the current array item's value:*/
+          b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+          /*execute a function when someone clicks on the item value (DIV element):*/
+          b.addEventListener("click", function(e) {
+              /*insert the value for the autocomplete text field:*/
+              inp.value = this.getElementsByTagName("input")[0].value;
+              /*close the list of autocompleted values,
+              (or any other open lists of autocompleted values:*/
+              closeAllLists();
+          });
+          a.appendChild(b);
+        }
+      }
+  });
+  /*execute a function presses a key on the keyboard:*/
+  inp.addEventListener("keydown", function(e) {
+      var x = document.getElementById(this.id + "autocomplete-list");
+      if (x) x = x.getElementsByTagName("div");
+      if (e.keyCode == 40) {
+        /*If the arrow DOWN key is pressed,
+        increase the currentFocus variable:*/
+        currentFocus++;
+        /*and and make the current item more visible:*/
+        addActive(x);
+      } else if (e.keyCode == 38) { //up
+        /*If the arrow UP key is pressed,
+        decrease the currentFocus variable:*/
+        currentFocus--;
+        /*and and make the current item more visible:*/
+        addActive(x);
+      } else if (e.keyCode == 13) {
+        /*If the ENTER key is pressed, prevent the form from being submitted,*/
+        e.preventDefault();
+        if (currentFocus > -1) {
+          /*and simulate a click on the "active" item:*/
+          if (x) x[currentFocus].click();
+        }
+      }
+  });
+  function addActive(x) {
+    /*a function to classify an item as "active":*/
+    if (!x) return false;
+    /*start by removing the "active" class on all items:*/
+    removeActive(x);
+    if (currentFocus >= x.length) currentFocus = 0;
+    if (currentFocus < 0) currentFocus = (x.length - 1);
+    /*add class "autocomplete-active":*/
+    x[currentFocus].classList.add("autocomplete-active");
+  }
+  function removeActive(x) {
+    /*a function to remove the "active" class from all autocomplete items:*/
+    for (var i = 0; i < x.length; i++) {
+      x[i].classList.remove("autocomplete-active");
+    }
+  }
+  function closeAllLists(elmnt) {
+    /*close all autocomplete lists in the document,
+    except the one passed as an argument:*/
+    var x = document.getElementsByClassName("autocomplete-items");
+    for (var i = 0; i < x.length; i++) {
+      if (elmnt != x[i] && elmnt != inp) {
+        x[i].parentNode.removeChild(x[i]);
+      }
+    }
+  }
+  /*execute a function when someone clicks in the document:*/
+  document.addEventListener("click", function (e) {
+      closeAllLists(e.target);
+  });
+}
+
+/*An array containing all the country names in the world:*/
+var countries = ["Typographic Universe", "Shadow Type", "Typography Sketchbooks", "Type Matters", "Helvetica", "New Ornamental Type", "Draw Your Own Fonts", "Arabic for Designers", "Principles of Organising Type", "Type Idea Index", "Type Object", "How to Use Type", "Type on Screen","SEO", "WEB Search Skills", "Teaching Online", "Keeping Up With Emerging Technologies", "Cyber World", "The Invisible Web","Philosophy for Dummies", "Oxford Dictionary of Philosophy", "Politikens Filosofi Leksikon", "Filosofi", "Filosofisk Leksikon", "Det Filosofiske Blik", "Filosofi og Common Sense","Psykologiske Grundtemaer", "Body Language", "Breakpoint", "Your Brain and Business", "Guide to Communicating with Color", "A Brain for Business","The myths of creativity", "Breakthrough Thinking", "Thinkertoys", "Thinking in New Boxes", "Inspired", "Insight Out", "Design Attitude", "Creative Stuff", "Ideal Problem Solver","The Philosophy of Science", "Critical Theory", "Kvalitative Metoder", "What is This Thing Called Science","The Filter Bubble", "Everybody Writes", "The Future Does Not Compute", "Information Arts", "Information Design", "Living in Information", "Global Communication", "Digital Media and Innovation", "Free Ride", "The Content Strategy Toolkit", "Remediation", "Writing on the Wall", "Writing and Editing for Digital Media", "Writing for the Web", "The Social Media Reader", "Moving Media Studies", "Etik", "12 Regler For Livet", "De 5 Valg", "Designing for Life", "Coaching", "Barking Up the Wrong Tree", "Eyes Wide Open", "Get in the Game", "The Go Giver", "Excuses!", "The Power of Habit", "What Money Can't Buy", "The good Paper", "The Craft of Research", "Exams and Assessments", "Problem-Oriented Project Work", "Tekter til Tiden", "Report writing in a Week"];
+
+/*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+autocomplete(document.getElementById("myInput"), countries);
+</script>
+ </div>   
+
+<br/>
+
+<!--Sectiones on the frst shelf-->
+
+<div id="shelf1" class="boxes">1</div>
+<div id="shelf2" class="boxes">2</div>
+<div id="shelf3" class="boxes">3</div>
+<div id="shelf4" class="boxes">4</div>
+
+    
+<!--Other shelves-->
+    
+<img id="table" src="img2/table.svg">
+    <br/>
+<img id="desk" src="img2/desk.svg">   
+<div id="shelf5" class="shadow-shelf">SHELF5</div>
+<div id="shelf6" class="shadow-shelf">SHELF6</div>
+<div id="shelf7" class="shadow-shelf">SHELF7</div>
+<div id="shelf8" class="shadow-shelf">SHELF8</div> 
+<div id="shelf9" class="shadow-shelf">SHELF9</div>
+<div id="shelf10" class="shadow-shelf">SHELF10</div>
+<div id="shelf11" class="shadow-shelf">SHELF11</div>
+<div id="shelf12" class="shadow-shelf">SHELF12</div> 
+
+
+<div id="myModal" class="modal">
+  <span class="close">&times;</span>
+  <img class="modal-content" id="img01">
+  <div id="caption"></div>
+    <a href="shelves.html"><span class="find-another">Find Another</span></a>
+</div>    
+    
+<script>
+function myFunction() {
+  /*VALUE YOU TYPE IN THE SEARCH BAR*/
+  
+  var book = document.getElementById("myInput").value;
+
+
+  /*SHELF 1 */
+
+  /*SHELF 1- TYPOGRAPHY*/
+  var category_typography = ["Typographic Universe", "Shadow Type", "Typography Sketchbooks", "Type Matters", "Helvetica", "New Ornamental Type", "Draw Your Own Fonts", "Arabic for Designers", "Principles of Organising Type", "Type Idea Index", "Type Object", "How to Use Type", "Type on Screen"];
+  var answer_typography = category_typography.includes (book);
+  if (answer_typography == true){
+    var modal = document.getElementById('myModal');
+    var shelf_1 = document.getElementById('shelf1');
+    shelf_1.style.backgroundImage = "linear-gradient(#FFB302, #FFCF00, #FFDF01)";
+    shelf_1.style.animation = "pulse 2s infinite";
+    shelf_1.style.border = "2px solid #FFD300";
+    shelf_1.style.textShadow = "1px 1px 2px #ffffff" ;
+    shelf_1.style.cursor = "pointer" ;
+    shelf_1.innerHTML = "click here";
+    shelf_1.style.color = "black";
+    var modalImg = document.getElementById("img01");
+    var captionText = document.getElementById("caption");
+    shelf_1.onclick = function(){
+      modal.style.display = "block";
+      modalImg.src = "img2/typography.jpg";
+      captionText.innerHTML = ("Your book is here.");
+}
+
+  }
+
+  /*SHELF 1- INTERNET AS MEDIA*/
+    
+      var category_internet = ["SEO", "WEB Search Skills", "Teaching Online", "Keeping Up With Emerging Technologies", "Cyber World", "The Invisible Web"];
+  var answer_internet = category_internet.includes (book);
+  if (answer_internet == true){
+    var modal = document.getElementById('myModal');
+    var shelf_1 = document.getElementById('shelf1');
+    shelf_1.style.backgroundImage = "linear-gradient(#FFB302, #FFCF00, #FFDF01)";
+    shelf_1.style.animation = "pulse 2s infinite";
+    shelf_1.style.border = "2px solid #FFD300";
+    shelf_1.style.textShadow = "1px 1px 2px #ffffff" ;
+    shelf_1.style.cursor = "pointer" ;
+    shelf_1.innerHTML = "click here";
+    shelf_1.style.color = "black";
+    var modalImg = document.getElementById("img01");
+    var captionText = document.getElementById("caption");
+    shelf_1.onclick = function(){
+      modal.style.display = "block";
+      modalImg.src = "img/Internet.jpg";
+      captionText.innerHTML = ("Your book is here. To find another book, please refresh.");
+}
+
+  }
+    
+    
+ 
+  /*SHELF 1- JOURNALISM*/
+    
+  var category_journalism = ["Digital Media and Innovation", "Free Ride", "The Content Strategy Toolkit", "Remediation", "Writing on the Wall", "Writing and Editing for Digital Media", "Writing for the Web", "The Social Media Reader", "Moving Media Studies"];
+  var answer_journalism = category_journalism.includes (book);
+  if (answer_journalism == true){
+    var modal = document.getElementById('myModal');
+    var shelf_1 = document.getElementById('shelf1');
+    shelf_1.style.backgroundImage = "linear-gradient(#FFB302, #FFCF00, #FFDF01)";
+    shelf_1.style.animation = "pulse 2s infinite";
+    shelf_1.style.border = "2px solid #FFD300";
+    shelf_1.style.textShadow = "1px 1px 2px #ffffff" ;
+    shelf_1.style.cursor = "pointer" ;
+    shelf_1.innerHTML = "click here";
+    shelf_1.style.color = "black";
+    var modalImg = document.getElementById("img01");
+    var captionText = document.getElementById("caption");
+    shelf_1.onclick = function(){
+      modal.style.display = "block";
+      modalImg.src = "img/Journalism.jpg";
+      captionText.innerHTML = ("Your book is here. To find another book, please refresh.");
+}
+
+  }
+    
+    
+  
+  /*SHELF 1- PHILOSOPHY (not done)*/ 
+    
+      var category_philosophy = ["Philosophy for Dummies", "Oxford Dictionary of Philosophy", "Politikens Filosofi Leksikon", "Filosofi", "Filosofisk Leksikon", "Det Filosofiske Blik", "Filosofi og Common Sense"];
+  var answer_philosophy = category_philosophy.includes (book);
+  if (answer_philosophy == true){
+    var modal = document.getElementById('myModal');
+    var shelf_1 = document.getElementById('shelf1');
+    shelf_1.style.backgroundImage = "linear-gradient(#FFB302, #FFCF00, #FFDF01)";
+    shelf_1.style.animation = "pulse 2s infinite";
+    shelf_1.style.border = "2px solid #FFD300";
+    shelf_1.style.textShadow = "1px 1px 2px #ffffff" ;
+    shelf_1.style.cursor = "pointer" ;
+    shelf_1.innerHTML = "click here";
+    shelf_1.style.color = "black";
+    var modalImg = document.getElementById("img01");
+    var captionText = document.getElementById("caption");
+    shelf_1.onclick = function(){
+      modal.style.display = "block";
+      modalImg.src = "img/philosophynew2.jpg";  /*WRONG PICTURE*/ 
+      captionText.innerHTML = ("Your book is here. To find another book, please refresh.");
+}
+
+  }
+
+
+  /*SHELF 1- PSYCHOLOGY*/
+
+   var category_psychology = ["Psykologiske Grundtemaer", "Body Language", "Breakpoint", "Your Brain and Business", "Guide to Communicating with Color", "A Brain for Business"];
+  var answer_psychology = category_psychology.includes (book);
+  if (answer_psychology == true){
+    var modal = document.getElementById('myModal');
+    var shelf_1 = document.getElementById('shelf1');
+    shelf_1.style.backgroundImage = "linear-gradient(#FFB302, #FFCF00, #FFDF01)";
+    shelf_1.style.animation = "pulse 2s infinite";
+    shelf_1.style.border = "2px solid #FFD300";
+    shelf_1.style.textShadow = "1px 1px 2px #ffffff" ;
+    shelf_1.style.cursor = "pointer" ;
+    shelf_1.innerHTML = "click here";
+    shelf_1.style.color = "black";
+    var modalImg = document.getElementById("img01");
+    var captionText = document.getElementById("caption");
+    shelf_1.onclick = function(){
+      modal.style.display = "block";
+      modalImg.src = "img/psychologynew.jpg";
+      captionText.innerHTML = ("Your book is here. To find another book, please refresh.");
+}
+
+  }
+
+  /*SHELF 2- CREATIVITY*/
+    
+  var category_creativity = ["The myths of creativity", "Breakthrough Thinking", "Thinkertoys", "Thinking in New Boxes", "Inspired", "Insight Out", "Design Attitude", "Creative Stuff", "Ideal Problem Solver"];
+  var answer_creativity = category_creativity.includes (book);
+  if (answer_creativity == true){
+    var modal = document.getElementById('myModal');
+    var shelf_2 = document.getElementById('shelf2');
+    shelf_2.style.backgroundImage = "linear-gradient(#FFB302, #FFCF00, #FFDF01)";
+    shelf_2.style.animation = "pulse 2s infinite";
+    shelf_2.style.border = "2px solid #FFD300";
+    shelf_2.style.textShadow = "1px 1px 2px #ffffff" ;
+    shelf_2.style.cursor = "pointer" ;
+    shelf_2.innerHTML = "click here";
+    shelf_2.style.color = "black";
+    var modalImg = document.getElementById("img01");
+    var captionText = document.getElementById("caption");
+    shelf_2.onclick = function(){
+      modal.style.display = "block";
+      modalImg.src = "img/Creativity.jpg";
+      captionText.innerHTML = ("Your book is here. To find another book, please refresh.");
+}
+
+  }
+    
+    
+  /*SHELF 2 and 3- PERSONAL DEVELOPMENT*/
+    
+  var category_personal = ["Etik", "12 Regler For Livet", "De 5 Valg", "Designing for Life", "Coaching", "Barking Up the Wrong Tree", "Eyes Wide Open", "Get in the Game", "The Go Giver", "Excuses!", "The Power of Habit", "What Money Can't Buy"];
+  var answer_personal = category_personal.includes (book);
+  if (answer_personal == true){
+    var modal = document.getElementById('myModal');
+    var shelf_2 = document.getElementById('shelf2');
+    shelf_2.style.backgroundImage = "linear-gradient(#FFB302, #FFCF00, #FFDF01)";
+    shelf_2.style.animation = "pulse 2s infinite";
+    shelf_2.style.border = "2px solid #FFD300";
+    shelf_2.style.textShadow = "1px 1px 2px #ffffff" ;
+    shelf_2.style.cursor = "pointer" ;
+    shelf_2.innerHTML = "click here";
+    shelf_2.style.color = "black";
+      var shelf_3 = document.getElementById('shelf3');
+    shelf_3.style.backgroundImage = "linear-gradient(#FFB302, #FFCF00, #FFDF01)";
+    shelf_3.style.animation = "pulse 2s infinite";
+    shelf_3.style.border = "2px solid #FFD300";
+    shelf_3.style.textShadow = "1px 1px 2px #ffffff" ;
+    shelf_3.style.cursor = "pointer" ;
+    shelf_3.innerHTML = ".";
+    shelf_3.style.color = "#FFDF01";
+    var modalImg = document.getElementById("img01");
+    var captionText = document.getElementById("caption");
+    shelf_2.onclick = function(){
+      modal.style.display = "block";
+      modalImg.src = "img/Personal Development.jpg";
+      captionText.innerHTML = ("Your book is here. To find another book, please refresh.");
+}
+        shelf_3.onclick = function(){
+      modal.style.display = "block";
+      modalImg.src = "img/Personal Development.jpg";
+      captionText.innerHTML = ("Your book is here. To find another book, please refresh.");
+}
+
+  }    
+
+    
+
+  /*SHELF 3- PHILOSOPHY OF SCIENCE*/
+    
+  var category_science = ["The Philosophy of Science", "Critical Theory", "Kvalitative Metoder", "What is This Thing Called Science"];
+  var answer_science = category_science.includes (book);
+  if (answer_science == true){
+    var modal = document.getElementById('myModal');
+    var shelf_3 = document.getElementById('shelf3');
+    shelf_3.style.backgroundImage = "linear-gradient(#FFB302, #FFCF00, #FFDF01)";
+    shelf_3.style.animation = "pulse 2s infinite";
+    shelf_3.style.border = "2px solid #FFD300";
+    shelf_3.style.textShadow = "1px 1px 2px #ffffff" ;
+    shelf_3.style.cursor = "pointer" ;
+    shelf_3.innerHTML = "click here";
+    shelf_3.style.color = "black";
+    var modalImg = document.getElementById("img01");
+    var captionText = document.getElementById("caption");
+    shelf_3.onclick = function(){
+      modal.style.display = "block";
+      modalImg.src = "img/Science.jpg";
+      captionText.innerHTML = ("Your book is here. To find another book, please refresh.");
+}
+
+  } 
+
+        
+  /*SHELF 3 and 4- STUDY SKILLS*/
+    
+      var category_study = ["The good Paper", "The Craft of Research", "Exams and Assessments", "Problem-Oriented Project Work", "Tekter til Tiden", "Report writing in a Week"];
+  var answer_study = category_study.includes (book);
+  if (answer_study == true){
+    var modal = document.getElementById('myModal');
+    var shelf_3 = document.getElementById('shelf3');
+    shelf_3.style.backgroundImage = "linear-gradient(#FFB302, #FFCF00, #FFDF01)";
+    shelf_3.style.animation = "pulse 2s infinite";
+    shelf_3.style.border = "2px solid #FFD300";
+    shelf_3.style.textShadow = "1px 1px 2px #ffffff" ;
+    shelf_3.style.cursor = "pointer" ;
+    shelf_3.innerHTML = "click here";
+    shelf_3.style.color = "black";
+        var shelf_4 = document.getElementById('shelf4');
+    shelf_4.style.backgroundImage = "linear-gradient(#FFB302, #FFCF00, #FFDF01)";
+    shelf_4.style.animation = "pulse 2s infinite";
+    shelf_4.style.border = "2px solid #FFD300";
+    shelf_4.style.textShadow = "1px 1px 2px #ffffff" ;
+    shelf_4.style.cursor = "pointer" ;
+    shelf_4.innerHTML = ".";
+    shelf_4.style.color = "#FFDF01";
+    var modalImg = document.getElementById("img01");
+    var captionText = document.getElementById("caption");
+    shelf_3.onclick = function(){
+      modal.style.display = "block";
+      modalImg.src = "img/Study Skills.jpg";
+      captionText.innerHTML = ("Your book is here. To find another book, please refresh.");
+}
+            shelf_4.onclick = function(){
+      modal.style.display = "block";
+      modalImg.src = "img/Study Skills.jpg";
+      captionText.innerHTML = ("Your book is here. To find another book, please refresh.");
+}
+
+  }
+    
+
+    
+  /*SHELF 4- COMMUNICATION THEORY (not done)*/
+    
+  var category_communication = ["The Filter Bubble", "Everybody Writes", "The Future Does Not Compute", "Information Arts", "Information Design", "Living in Information", "Global Communication"];
+  var answer_communication = category_communication.includes (book);
+  if (answer_communication == true){
+    var modal = document.getElementById('myModal');
+    var shelf_4 = document.getElementById('shelf4');
+    shelf_4.style.backgroundImage = "linear-gradient(#FFB302, #FFCF00, #FFDF01)";
+    shelf_4.style.animation = "pulse 2s infinite";
+    shelf_4.style.border = "2px solid #FFD300";
+    shelf_4.style.textShadow = "1px 1px 2px #ffffff" ;
+    shelf_4.style.cursor = "pointer" ;
+    shelf_4.innerHTML = "click here";
+    shelf_4.style.color = "black";
+    var modalImg = document.getElementById("img01");
+    var captionText = document.getElementById("caption");
+    shelf_4.onclick = function(){
+      modal.style.display = "block";
+      modalImg.src = "img/Communication.jpg";
+      captionText.innerHTML = ("Your book is here. To find another book, please refresh.");
+}
+
+  }
+        
+    
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() { 
+  modal.style.display = "none";
+}
+
+
+}
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+    
+<head>
+  <title>Turn your device horizontally</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    
+    
+    <style>
+    
+    body {
+    width: 100%;
+    height: 100vh;
+    font-family: 'Roboto', sans-serif;
+    background-image: linear-gradient(rgba(81, 138, 179, 1), rgba(81, 138, 179,0.5));
+    background-color: rgba (192,192,192,0);
+    margin: 0 auto;
+  width: 100%;
+    max-width: 1000px;
+  text-align: center;
+        
+        }
+        
+
+        
+                /* Portrait */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 667px) 
+  and (-webkit-min-device-pixel-ratio: 2)
+    and (orientation: portrait) { 
+    
+    button { 
+      display: none!important;
+        visibility: hidden;
+}
+        
+        #turn {
+    margin-top: 40%;
+    margin-bottom: 20%;
+        
+        }
+        
+        #thanks {
+            display:none;
+        }
+        
+        }
+
+/* Landscape */
+@media only screen 
+  and (min-device-width: 374px) 
+  and (max-device-width: 1400px) 
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: landscape) 
+{
+    img{
+        display: none;
+    }
+    
+    #turn {
+        display: none;
+    }
+    
+    
+    #thanks{
+        margin-top: 20%; 
+    }
+    
+    button { 
+
+    display: inline-block;
+    border: none;
+    margin-top: 10%;
+    padding: 0.6rem 1.5rem;
+    text-decoration: none;
+    color: black;
+    font-family: 'Roboto',sans-serif;
+    font-size: 0.7rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: #FFE001;
+    padding: 10px 30px 10px 30px;
+      
+}
+        
+        }
+        
+        
+}
+    
+    </style>
+    
+    
+    <script>
+    function example1() {
+        
+        navigator.vibrate([500]);
+    }
+    
+    </script>
+    
+    </head>
+    
+    
+    <body>
+    <h2 id="turn">Turn your device horizontally</h2>
+    <h2 id="thanks">Thank you! :) </h2>
+        
+    <img src="img2/turn-device.png" width="150px" height="150px">
+        <br/>
+        
+       <a href="shelves.html"><button>Continue</button></a>
+        
+        
+    
+    
+    </body>
+    
+    
+</html>
